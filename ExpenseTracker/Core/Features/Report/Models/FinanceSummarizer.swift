@@ -18,7 +18,7 @@ struct FinanceSummarizer {
         """
     }
     
-    func summarize(_ input: FinanceSummaryInput) async throws -> FinanceSummaryOutput {
+    func summarize(_ input: FinanceSummaryInput) async throws -> FinanceSummary {
         let prompt = """
             Analyze the user's weekly finicial data below and produce a concise, firendly summary.
             -Include a title
@@ -37,6 +37,9 @@ struct FinanceSummarizer {
         let output = try await session.respond(to: prompt, generating: FinanceSummaryOutput.self)
         print("DEBUG: Output Content: \(output.content)")
         
-        return output.content
+        let summary = FinanceSummary(startDate: input.startDate, endDate: input.endDate, overview: output.content.overview, keyInsights: output.content.keyInsights, recommendations: output.content.recommendations)
+        
+//        return output.content
+        return summary
     }
 }

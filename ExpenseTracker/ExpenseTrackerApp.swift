@@ -18,7 +18,7 @@ struct ExpenseTrackerApp: App {
     }
     
     private var sharedModelContainer: ModelContainer {
-        let schema = Schema([AITranscation.self])
+        let schema = Schema([AITranscation.self, FinanceSummary.self])
         let config = ModelConfiguration(schema: schema)
         
         do {
