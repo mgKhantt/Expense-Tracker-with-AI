@@ -27,6 +27,7 @@ struct ReportView: View {
                         }
                         .buttonStyle(.plain)
                     }
+                    .onDelete(perform: deleteTransactions)
                 }
                 .padding()
             }
@@ -72,6 +73,13 @@ private extension ReportView {
             }
         }
     }
+    
+    func deleteTransactions(at offset: IndexSet) {
+        for index in offset {
+            let tx = summaries[index]
+            context.delete(tx)
+        }
+    }
 }
 
 #Preview {
@@ -108,7 +116,7 @@ struct SummaryCard: View {
         .background(
             RoundedRectangle(cornerRadius: 20, style: .continuous)
                 .fill(Color(.secondarySystemGroupedBackground))
-                .shadow(color: .black.opacity(0.03), radius: 8, y: 4)
+                .shadow(color: .black.opacity(0.3), radius: 8, y: 4)
         )
     }
 }
