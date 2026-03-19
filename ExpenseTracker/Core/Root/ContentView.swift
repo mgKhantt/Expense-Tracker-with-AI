@@ -12,7 +12,7 @@ struct ContentView: View {
         TabView {
             TransactionView()
                 .tabItem {
-                    Label("Transactions", systemImage: "list.bullet.rectangle")
+                    Label("Transactions", systemImage: "creditcard.fill")
                 }
             
             ReportView()

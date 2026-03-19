@@ -26,28 +26,11 @@ struct TransactionView: View {
             Group {
                 if transactions.isEmpty {
                     VStack(spacing: 16) {
-                        if #available(iOS 17.0, *) {
-                            ContentUnavailableView(
-                                "No Transactions",
-                                systemImage: "tray",
-                                description: Text("Add your first transaction to get started.")
-                            )
-                        } else {
-                            VStack(spacing: 12) {
-                                Image(systemName: "tray")
-                                    .font(.system(size: 40))
-                                    .foregroundColor(.gray.opacity(0.6))
-                                
-                                Text("No Transactions")
-                                    .font(.headline)
-                                
-                                Text("Add your first transaction to get started.")
-                                    .font(.subheadline)
-                                    .foregroundColor(.secondary)
-                                    .multilineTextAlignment(.center)
-                            }
-                            .padding()
-                        }
+                        ContentUnavailableView(
+                            "No Transactions",
+                            systemImage: "tray",
+                            description: Text("Add your first transaction to get started.")
+                        )
                     }
                     .padding()
                 } else {
@@ -78,9 +61,9 @@ struct TransactionView: View {
                 }
             }
             .environment(\.editMode, $editMode)
-            .onAppear {
-                loadSamples()
-            }
+//            .onAppear {
+//                loadSamples()
+//            }
             #warning("If you start this project for the first time, please uncomment the line below to load sample data.")
         }
     }

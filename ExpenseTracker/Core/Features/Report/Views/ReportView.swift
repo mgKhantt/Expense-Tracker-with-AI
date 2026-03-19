@@ -18,28 +18,48 @@ struct ReportView: View {
     
     var body: some View {
         NavigationStack {
-            ScrollView {
-                LazyVStack(spacing: 16) {
-                    ForEach(summaries) { summary in
-                        // Using a NavigationLink so the cards are interactive
-                        NavigationLink(destination: SummaryDetailView(summary: summary)) {
-                            SummaryCard(summary: summary)
-                        }
-                        .buttonStyle(.plain)
+            Group {
+                if summaries.isEmpty {
+                    VStack(spacing: 16) {
+                        ContentUnavailableView(
+                            "No Reports",
+                            systemImage: "tray",
+                            description: Text("Generate your first report to get started.")
+                        )
                     }
-                    .onDelete(perform: deleteTransactions)
+                    .padding()
+                } else {
+                    List {
+                        ForEach(summaries) { summary in
+                            NavigationLink(destination: SummaryDetailView(summary: summary)) {
+                                SummaryCard(summary: summary)
+                            }
+                            .listRowSeparator(.hidden) // Hides the lines between cards
+                            .listRowBackground(Color.clear) // Makes the background transparent
+                            .listRowInsets(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
+                            .buttonStyle(.plain)
+                        }
+                        .onDelete(perform: deleteReport) // Now this will work!
+                    }
+                    .listStyle(.plain)
+                    .background(Color(.systemGroupedBackground))
                 }
-                .padding()
             }
             .navigationTitle("Reports")
             .toolbar {
-                Button {
-                    generateWeeklyReport()
-                } label: {
-                    if isLoading {
-                        ProgressView()
-                    } else {
-                        Image(systemName: "sparkles")
+                ToolbarItem(placement: .topBarLeading) {
+                    EditButton()
+                }
+                
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button {
+                        generateWeeklyReport()
+                    } label: {
+                        if isLoading {
+                            ProgressView()
+                        } else {
+                            Image(systemName: "sparkles")
+                        }
                     }
                 }
             }
@@ -74,7 +94,7 @@ private extension ReportView {
         }
     }
     
-    func deleteTransactions(at offset: IndexSet) {
+    func deleteReport(at offset: IndexSet) {
         for index in offset {
             let tx = summaries[index]
             context.delete(tx)
@@ -98,12 +118,6 @@ struct SummaryCard: View {
                 Text(summary.createdAt.formatted(date: .abbreviated, time: .omitted))
                     .font(.headline)
                     .foregroundStyle(.primary)
-                
-                Spacer()
-                
-                Image(systemName: "chevron.right")
-                    .font(.caption2.bold())
-                    .foregroundStyle(.tertiary)
             }
             
             Text(summary.overview)
