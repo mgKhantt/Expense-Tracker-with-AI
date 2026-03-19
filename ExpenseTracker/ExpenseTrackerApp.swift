@@ -6,12 +6,26 @@
 //
 
 import SwiftUI
+import SwiftData
 
 @main
 struct ExpenseTrackerApp: App {
     var body: some Scene {
         WindowGroup {
-            TransactionView()
+            ContentView()
+                .modelContainer(sharedModelContainer)
+        }
+    }
+    
+    private var sharedModelContainer: ModelContainer {
+        let schema = Schema([AITranscation.self])
+        let config = ModelConfiguration(schema: schema)
+        
+        do {
+            return try ModelContainer(for: schema, configurations: [config])
+        } catch {
+            fatalError("Failed to create ModelContainer: \(error.localizedDescription)")
         }
     }
 }
+

@@ -6,9 +6,11 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct AddTransactionSheet: View {
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.modelContext) private var context
     
     @State private var merchant: String = ""
     @State private var amountString: String = ""
@@ -50,11 +52,31 @@ struct AddTransactionSheet: View {
                 
                 ToolbarItem(placement: .topBarTrailing) {
                     Button("Save") {
-                        //save transaction
+                        saveTransaction()
                     }
                 }
             }
         }
+    }
+}
+
+private extension AddTransactionSheet {
+    func saveTransaction() {
+        guard let amount = Double(amountString), amount > 0 else { return }
+        
+        let tx = AITranscation(
+            id: UUID(),
+            amount: amount,
+            date: date,
+            merchant: merchant.isEmpty ? "Unknown" : merchant,
+            category: category,
+            isSubscription: isSubscription,
+            notes: notes.isEmpty ? nil : notes
+        )
+        
+        context.insert(tx)
+        
+        dismiss()
     }
 }
 

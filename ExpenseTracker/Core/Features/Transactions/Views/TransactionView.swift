@@ -6,12 +6,19 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct TransactionView: View {
     
-    @State private var transactions: [AITranscation] = []
-    @State private var showingAdd: Bool = false
+    @Environment(\.modelContext) private var context
     
+    @Query(
+        FetchDescriptor<AITranscation>(
+            sortBy: [SortDescriptor(\.date, order: .reverse)]
+        )
+    ) private var transactions: [AITranscation]
+    
+    @State private var showingAdd: Bool = false
     @State private var editMode: EditMode = .inactive
     
     var body: some View {
@@ -71,21 +78,27 @@ struct TransactionView: View {
                 }
             }
             .environment(\.editMode, $editMode)
-            .onAppear {
-                loadSamples()
-            }
+            #warning("If you start this project for the first time, please uncomment the line below to load sample data.")
+//            .onAppear {
+//                loadSamples()
+//            }
         }
     }
 }
 
 private extension TransactionView {
     func loadSamples() {
-        self.transactions = AITranscation.mockList
+        let transactions = AITranscation.mockList
+        
+        for tx in transactions {
+            context.insert(tx)
+        }
     }
     
     func deleteTransactions(at offset: IndexSet) {
         for index in offset {
-            transactions.remove(at: index)
+            let tx = transactions[index]
+            context.delete(tx)
         }
     }
 }

@@ -7,8 +7,10 @@
 
 import Foundation
 import SwiftUI
+import SwiftData
 
-struct AITranscation: Identifiable, Codable {
+@Model
+class AITranscation: Identifiable {
     var id: UUID
     var amount: Double
     var date: Date
@@ -16,6 +18,16 @@ struct AITranscation: Identifiable, Codable {
     var category: Category
     var isSubscription: Bool
     var notes: String?
+    
+    init(id: UUID, amount: Double, date: Date, merchant: String, category: Category, isSubscription: Bool, notes: String? = nil) {
+        self.id = id
+        self.amount = amount
+        self.date = date
+        self.merchant = merchant
+        self.category = category
+        self.isSubscription = isSubscription
+        self.notes = notes
+    }
     
     enum Category: String, Codable, CaseIterable, Identifiable {
         case groceries
