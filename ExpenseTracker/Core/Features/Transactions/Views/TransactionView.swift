@@ -78,10 +78,10 @@ struct TransactionView: View {
                 }
             }
             .environment(\.editMode, $editMode)
-            #warning("If you start this project for the first time, please uncomment the line below to load sample data.")
 //            .onAppear {
 //                loadSamples()
 //            }
+            #warning("If you start this project for the first time, please uncomment the line below to load sample data.")
         }
     }
 }

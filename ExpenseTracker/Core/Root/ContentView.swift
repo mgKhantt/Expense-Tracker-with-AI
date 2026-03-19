@@ -9,7 +9,17 @@ import SwiftUI
 
 struct ContentView: View {
     var body: some View {
-        TransactionView()
+        TabView {
+            TransactionView()
+                .tabItem {
+                    Label("Transactions", systemImage: "list.bullet.rectangle")
+                }
+            
+            ReportView()
+                .tabItem {
+                    Label("Reports", systemImage: "doc.text.magnifyingglass")
+                }
+        }
     }
 }
 
